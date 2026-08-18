@@ -1,0 +1,11 @@
+diff --git a/src/orders.ts b/src/orders.ts
+index 1111111..2222222 100644
+--- a/src/orders.ts
++++ b/src/orders.ts
+@@ -1,2 +1,5 @@
+ export async function listOrders(db) {
++  const orders = await db.orders.findMany();
++  for (const order of orders) {
++    order.customer = await db.customers.findById(order.customerId);
++  }
+ }
