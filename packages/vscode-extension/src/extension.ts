@@ -138,7 +138,7 @@ async function runReview(
 async function resolveApiKeys(
   context: vscode.ExtensionContext,
 ): Promise<NodeJS.ProcessEnv | undefined> {
-  const env = { ...process.env };
+  const env = { ...process.env, ...(await loadWorkspaceProviderKeys()) };
   for (const provider of Object.keys(secretNames) as Provider[]) {
     const value = await context.secrets.get(secretNames[provider]);
     if (value) env[`${provider.toUpperCase()}_API_KEY`] = value;
@@ -148,6 +148,27 @@ async function resolveApiKeys(
   if (!saved) return undefined;
   env[`${saved.provider.toUpperCase()}_API_KEY`] = saved.key;
   return env;
+}
+
+async function loadWorkspaceProviderKeys(): Promise<NodeJS.ProcessEnv> {
+  const folder = vscode.workspace.workspaceFolders?.[0];
+  if (!folder) return {};
+  try {
+    const bytes = await vscode.workspace.fs.readFile(vscode.Uri.joinPath(folder.uri, '.env'));
+    const text = new TextDecoder().decode(bytes);
+    const keys: NodeJS.ProcessEnv = {};
+    for (const line of text.split(/\r?\n/)) {
+      const match =
+        /^\s*(?:export\s+)?(GROQ_API_KEY|CEREBRAS_API_KEY|GEMINI_API_KEY)\s*=\s*(.*?)\s*$/.exec(
+          line,
+        );
+      if (!match?.[1] || !match[2]) continue;
+      keys[match[1]] = match[2].replace(/^(['"])(.*)\1$/, '$2');
+    }
+    return keys;
+  } catch {
+    return {};
+  }
 }
 
 async function setApiKey(

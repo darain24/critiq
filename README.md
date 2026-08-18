@@ -38,7 +38,7 @@ corepack pnpm -r test
 corepack pnpm -r lint
 ```
 
-Copy `.env.example` to `.env` for a local shell and populate only the providers you want. `.env` files are ignored. The repository does not load `.env` implicitly; use your shell, editor launch configuration, CI secrets, or an environment loader so secret handling stays explicit.
+Copy `.env.example` to `.env` and populate only the providers you want. `.env` files are ignored. The VS Code extension reads the first workspace folder's `.env` for F5 development; other packages use the shell or CI environment so secret handling stays explicit.
 
 An optional `.reviewconfig.json` in the caller's working directory can configure categories, ignored paths, and minimum severity. Start from `.reviewconfig.example.json`.
 
