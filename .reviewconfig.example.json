@@ -1,0 +1,5 @@
+{
+  "enabledCategories": ["bug", "security", "style", "performance"],
+  "ignorePaths": ["dist/**", "*.lock"],
+  "minSeverity": "style"
+}
