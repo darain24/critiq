@@ -1,0 +1,66 @@
+{
+  "name": "ai-code-review-vscode",
+  "displayName": "AI Code Review",
+  "description": "Review files and staged changes with user-supplied Groq, Cerebras, or Gemini keys.",
+  "version": "0.1.0",
+  "publisher": "yourscope",
+  "engines": { "vscode": "^1.95.0" },
+  "categories": ["Linters"],
+  "activationEvents": [
+    "onCommand:codeReview.reviewCurrentFile",
+    "onCommand:codeReview.reviewSelection",
+    "onCommand:codeReview.reviewStagedChanges",
+    "onCommand:codeReview.setApiKey"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "codeReview.reviewCurrentFile", "title": "AI Code Review: Review Current File" },
+      { "command": "codeReview.reviewSelection", "title": "AI Code Review: Review Selection" },
+      { "command": "codeReview.reviewStagedChanges", "title": "AI Code Review: Review Staged Changes" },
+      { "command": "codeReview.setApiKey", "title": "AI Code Review: Set API Key" }
+    ],
+    "configuration": {
+      "title": "AI Code Review",
+      "properties": {
+        "codeReview.enabledCategories": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["bug", "security", "style", "performance"] },
+          "default": ["bug", "security", "style", "performance"],
+          "description": "Review categories to run."
+        },
+        "codeReview.minSeverity": {
+          "type": "string",
+          "enum": ["style", "performance", "bug", "security"],
+          "default": "style",
+          "description": "Lowest severity to display."
+        },
+        "codeReview.provider": {
+          "type": "string",
+          "enum": ["auto", "groq", "cerebras", "gemini"],
+          "default": "auto",
+          "description": "Provider to use. Auto enables fallback in Groq, Cerebras, Gemini order."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "compile:test": "tsc -p test/tsconfig.json",
+    "test": "pnpm compile:test && node ./out-test/runTest.js",
+    "lint": "eslint src test --max-warnings=0"
+  },
+  "dependencies": {
+    "@yourscope/review-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.3.0",
+    "@types/vscode": "^1.95.0",
+    "@vscode/test-electron": "^2.5.2",
+    "esbuild": "^0.25.9",
+    "mocha": "^11.7.1"
+  },
+  "license": "MIT"
+}

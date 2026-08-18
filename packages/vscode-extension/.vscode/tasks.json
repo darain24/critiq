@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build extension",
+      "type": "shell",
+      "command": "corepack pnpm --filter ai-code-review-vscode build",
+      "problemMatcher": "$tsc"
+    }
+  ]
+}

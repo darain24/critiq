@@ -1,0 +1,19 @@
+# AI Code Review for VS Code
+
+Review the current file, a selection, or staged Git changes without a hosted backend. The extension calls Groq, Cerebras, or Gemini directly using your key.
+
+## Setup
+
+1. Run any **AI Code Review** command from the Command Palette.
+2. Choose a provider and enter its API key. The key is password-masked and stored in VS Code SecretStorage.
+3. Optionally set `codeReview.provider`, `codeReview.enabledCategories`, and `codeReview.minSeverity`.
+
+Environment keys (`GROQ_API_KEY`, `CEREBRAS_API_KEY`, or `GEMINI_API_KEY`) inherited by the Extension Development Host are also supported for local development. From the repository root, run `pnpm --filter ai-code-review-vscode build`, open the repository in VS Code, and press F5.
+
+## Walkthrough placeholders
+
+![Review current file setup GIF](docs/review-current-file.gif)
+
+![Apply suggestion setup GIF](docs/apply-suggestion.gif)
+
+The GIF paths are placeholders for release media.

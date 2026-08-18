@@ -1,6 +1,9 @@
 node_modules/
 dist/
 out/
+out-test/
+dist-types/
+.vscode-test/
 coverage/
 .env
 .env.*
