@@ -41,7 +41,9 @@ export async function postReview(
 ): Promise<void> {
   for (const comment of comments) {
     if (!changedLines.has(`${comment.file}:${comment.line}`)) {
-      warning(`Skipping ${comment.file}:${comment.line}; the line is not part of the pull request diff.`);
+      warning(
+        `Skipping ${comment.file}:${comment.line}; the line is not part of the pull request diff.`,
+      );
       continue;
     }
     try {

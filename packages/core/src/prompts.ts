@@ -27,3 +27,27 @@ Use the exact file path and an added line number shown above. Return [] when the
 DIFF HUNK:
 ${hunk.content}`;
 }
+
+export function buildBugPrompt(hunk: DiffHunk, language?: string): string {
+  return buildReviewPrompt('bug', hunk, language);
+}
+
+export function buildSecurityPrompt(hunk: DiffHunk, language?: string): string {
+  return buildReviewPrompt('security', hunk, language);
+}
+
+export function buildStylePrompt(hunk: DiffHunk, language?: string): string {
+  return buildReviewPrompt('style', hunk, language);
+}
+
+export function buildPerformancePrompt(hunk: DiffHunk, language?: string): string {
+  return buildReviewPrompt('performance', hunk, language);
+}
+
+export const promptBuilders: Record<ReviewCategory, (hunk: DiffHunk, language?: string) => string> =
+  {
+    bug: buildBugPrompt,
+    security: buildSecurityPrompt,
+    style: buildStylePrompt,
+    performance: buildPerformancePrompt,
+  };

@@ -63,7 +63,9 @@ describe('reviewDiff fixtures', () => {
   });
 
   it('retries once when the model returns malformed JSON', async () => {
-    const client = { review: vi.fn().mockResolvedValueOnce('not json').mockResolvedValueOnce('[]') };
+    const client = {
+      review: vi.fn().mockResolvedValueOnce('not json').mockResolvedValueOnce('[]'),
+    };
     await expect(
       reviewDiff(await fixture('malformed.diff'), { client, categories: ['bug'] }),
     ).resolves.toEqual([]);

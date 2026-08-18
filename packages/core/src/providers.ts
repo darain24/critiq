@@ -39,7 +39,6 @@ abstract class OpenAICompatibleProvider implements ReviewLLMClient {
           model: this.options.model ?? this.defaultModel,
           messages: [{ role: 'user', content: prompt }],
           temperature: 0,
-          response_format: { type: 'json_object' },
         }),
       },
       this.options.timeoutMs,
@@ -99,7 +98,8 @@ export class FallbackLLMClient implements ReviewLLMClient {
     private readonly providers: Array<{ name: string; client: ReviewLLMClient }>,
     private readonly logger: Pick<Console, 'warn'> = console,
   ) {
-    if (providers.length === 0) throw new Error('No LLM providers are configured. Add at least one API key.');
+    if (providers.length === 0)
+      throw new Error('No LLM providers are configured. Add at least one API key.');
   }
 
   async review(prompt: string): Promise<string> {

@@ -4,7 +4,7 @@ import { DefaultReviewCache } from './cache.js';
 import { loadReviewConfig } from './config.js';
 import { reviewWithRepair } from './json.js';
 import { parseUnifiedDiff } from './parser.js';
-import { buildReviewPrompt } from './prompts.js';
+import { promptBuilders } from './prompts.js';
 import { createLLMClientFromEnv } from './providers.js';
 import type { ReviewCategory, ReviewComment, ReviewOptions } from './types.js';
 
@@ -40,7 +40,7 @@ export async function reviewDiff(
 
   for (const hunk of hunks) {
     for (const category of categories) {
-      const prompt = buildReviewPrompt(category, hunk, options.language);
+      const prompt = promptBuilders[category](hunk, options.language);
       const result = await reviewWithRepair(client, prompt);
       comments.push(
         ...result.filter(

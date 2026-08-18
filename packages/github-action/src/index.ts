@@ -47,7 +47,8 @@ export async function run(): Promise<void> {
       mediaType: { format: 'diff' },
     });
     const diff = response.data as unknown as string;
-    if (typeof diff !== 'string') throw new Error('GitHub returned an unexpected non-text diff response.');
+    if (typeof diff !== 'string')
+      throw new Error('GitHub returned an unexpected non-text diff response.');
 
     const comments = await reviewDiff(diff, {
       categories: [...reviewCategories],

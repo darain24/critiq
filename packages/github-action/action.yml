@@ -1,5 +1,5 @@
-name: "AI Code Review"
-description: "Reviews pull request diffs using free-tier LLMs (Groq/Cerebras/Gemini)"
+name: 'AI Code Review'
+description: 'Reviews pull request diffs using free-tier LLMs (Groq/Cerebras/Gemini)'
 inputs:
   groq-api-key:
     required: false
@@ -9,10 +9,10 @@ inputs:
     required: false
   github-token:
     required: true
-    default: "${{ github.token }}"
+    default: '${{ github.token }}'
   min-severity:
     required: false
-    default: "style"
+    default: 'style'
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: 'node20'
+  main: 'dist/index.js'

@@ -20,7 +20,10 @@ describe('review MCP server over stdio', () => {
       await client.connect(transport);
       const tools = await client.listTools();
       expect(tools.tools.map((tool) => tool.name)).toEqual(['review_code']);
-      const diff = await readFile(join(packageDirectory, 'test/fixtures/deletion-only.diff'), 'utf8');
+      const diff = await readFile(
+        join(packageDirectory, 'test/fixtures/deletion-only.diff'),
+        'utf8',
+      );
       const result = await client.callTool({ name: 'review_code', arguments: { diff } });
       expect(result.isError).not.toBe(true);
       const content = result.content as Array<{ type: string; text?: string }>;

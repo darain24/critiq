@@ -40,13 +40,21 @@ export function activate(context: vscode.ExtensionContext): void {
       const editor = requireEditor();
       if (!editor) return;
       const document = editor.document;
-      await runReview(context, diagnostics, status, fullDocumentDiff(document), document.languageId);
+      await runReview(
+        context,
+        diagnostics,
+        status,
+        fullDocumentDiff(document),
+        document.languageId,
+      );
     }),
     vscode.commands.registerCommand('codeReview.reviewSelection', async () => {
       const editor = requireEditor();
       if (!editor) return;
       if (editor.selection.isEmpty) {
-        void vscode.window.showWarningMessage('Select code before running AI Code Review: Review Selection.');
+        void vscode.window.showWarningMessage(
+          'Select code before running AI Code Review: Review Selection.',
+        );
         return;
       }
       await runReview(
@@ -67,7 +75,9 @@ export function activate(context: vscode.ExtensionContext): void {
       const api = git.getAPI(1);
       const repository = chooseRepository(api.repositories);
       if (!repository) {
-        void vscode.window.showWarningMessage('Open a Git repository before reviewing staged changes.');
+        void vscode.window.showWarningMessage(
+          'Open a Git repository before reviewing staged changes.',
+        );
         return;
       }
       const diff = await repository.diffIndexWithHEAD();
@@ -107,11 +117,16 @@ async function runReview(
         status.text = `$(sync~spin) Reviewing... ${completed}/${total} hunks`;
       },
     });
-    const filtered = filterByMinimum(comments, settings.get<ReviewCategory>('minSeverity', 'style'));
+    const filtered = filterByMinimum(
+      comments,
+      settings.get<ReviewCategory>('minSeverity', 'style'),
+    );
     await publishDiagnostics(diagnostics, filtered);
     showResultsPanel(context, filtered);
     void vscode.window.showInformationMessage(
-      filtered.length === 0 ? 'AI Code Review found no issues.' : `AI Code Review found ${filtered.length} issue(s).`,
+      filtered.length === 0
+        ? 'AI Code Review found no issues.'
+        : `AI Code Review found ${filtered.length} issue(s).`,
     );
   } catch (error) {
     void vscode.window.showErrorMessage(`AI Code Review failed: ${errorMessage(error)}`);
@@ -120,7 +135,9 @@ async function runReview(
   }
 }
 
-async function resolveApiKeys(context: vscode.ExtensionContext): Promise<NodeJS.ProcessEnv | undefined> {
+async function resolveApiKeys(
+  context: vscode.ExtensionContext,
+): Promise<NodeJS.ProcessEnv | undefined> {
   const env = { ...process.env };
   for (const provider of Object.keys(secretNames) as Provider[]) {
     const value = await context.secrets.get(secretNames[provider]);
@@ -136,10 +153,10 @@ async function resolveApiKeys(context: vscode.ExtensionContext): Promise<NodeJS.
 async function setApiKey(
   context: vscode.ExtensionContext,
 ): Promise<{ provider: Provider; key: string } | undefined> {
-  const provider = await vscode.window.showQuickPick<Provider>(['groq', 'cerebras', 'gemini'], {
+  const provider = (await vscode.window.showQuickPick(['groq', 'cerebras', 'gemini'], {
     title: 'Choose an AI code review provider',
     placeHolder: 'Provider',
-  });
+  })) as Provider | undefined;
   if (!provider) return undefined;
   const key = await vscode.window.showInputBox({
     title: `Set ${provider} API key`,
@@ -201,7 +218,9 @@ function showResultsPanel(context: vscode.ExtensionContext, comments: ReviewComm
       const edit = new vscode.WorkspaceEdit();
       edit.replace(uri, document.lineAt(line).range, comment.suggestion);
       const applied = await vscode.workspace.applyEdit(edit);
-      void vscode.window.showInformationMessage(applied ? 'Suggestion applied.' : 'Suggestion could not be applied.');
+      void vscode.window.showInformationMessage(
+        applied ? 'Suggestion applied.' : 'Suggestion could not be applied.',
+      );
     },
     undefined,
     context.subscriptions,
@@ -246,7 +265,9 @@ function createSyntheticDiff(file: string, lines: string[], start: number): stri
 
 function workspacePath(uri: vscode.Uri): string {
   const folder = vscode.workspace.getWorkspaceFolder(uri);
-  return folder ? path.relative(folder.uri.fsPath, uri.fsPath).replaceAll(path.sep, '/') : path.basename(uri.fsPath);
+  return folder
+    ? path.relative(folder.uri.fsPath, uri.fsPath).replaceAll(path.sep, '/')
+    : path.basename(uri.fsPath);
 }
 
 function resolveFileUri(file: string): vscode.Uri {
@@ -262,7 +283,9 @@ function requireEditor(): vscode.TextEditor | undefined {
 
 function chooseRepository(repositories: GitRepository[]): GitRepository | undefined {
   const active = vscode.window.activeTextEditor?.document.uri;
-  return repositories.find((repo) => active?.fsPath.startsWith(repo.rootUri.fsPath)) ?? repositories[0];
+  return (
+    repositories.find((repo) => active?.fsPath.startsWith(repo.rootUri.fsPath)) ?? repositories[0]
+  );
 }
 
 const ranks: Record<ReviewCategory, number> = { style: 0, performance: 1, bug: 2, security: 3 };
@@ -277,7 +300,12 @@ function diagnosticSeverity(category: ReviewCategory): vscode.DiagnosticSeverity
 }
 
 function escapeHtml(value: string): string {
-  return value.replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character] ?? character);
+  return value.replace(
+    /[&<>"']/g,
+    (character) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character] ??
+      character,
+  );
 }
 
 function errorMessage(error: unknown): string {
