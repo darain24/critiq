@@ -1,0 +1,23 @@
+{
+  "name": "@yourscope/ai-code-review-action",
+  "version": "0.1.0",
+  "description": "Node 20 GitHub Action for AI pull request review",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --minify",
+    "test": "vitest run",
+    "lint": "eslint src test --max-warnings=0"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1",
+    "@yourscope/review-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@vercel/ncc": "^0.38.3",
+    "vitest": "^3.2.4"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
