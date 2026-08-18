@@ -1,0 +1,8 @@
+diff --git a/src/legacy.ts b/src/legacy.ts
+deleted file mode 100644
+index 1111111..0000000
+--- a/src/legacy.ts
++++ /dev/null
+@@ -1,2 +0,0 @@
+-export const legacy = true;
+-console.log(legacy);

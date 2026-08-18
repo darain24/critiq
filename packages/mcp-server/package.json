@@ -1,0 +1,28 @@
+{
+  "name": "@yourscope/review-mcp-server",
+  "version": "0.1.0",
+  "description": "Local stdio MCP server for AI code review",
+  "type": "module",
+  "bin": {
+    "review-mcp-server": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "pnpm build && vitest run",
+    "lint": "eslint src test --max-warnings=0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.4",
+    "@yourscope/review-core": "workspace:*",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "vitest": "^3.2.4"
+  },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
