@@ -48,7 +48,7 @@ export class DefaultReviewCache implements ReviewCache {
   private readonly disk: FileSystemJsonCache;
 
   constructor(cwd = process.cwd()) {
-    this.disk = new FileSystemJsonCache(join(cwd, '.cache', 'code-review-system.json'));
+    this.disk = new FileSystemJsonCache(join(cwd, '.cache', 'critiq.json'));
   }
 
   async get(key: string): Promise<ReviewComment[] | undefined> {

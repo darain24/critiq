@@ -1,4 +1,4 @@
-# AI Code Review System
+# Critiq
 
 A production-oriented TypeScript monorepo with one review engine and three ways to use it: inside VS Code, on GitHub pull requests, or from any MCP-compatible coding agent. There is no hosted application, database, account system, or metered backend owned by this project.
 
