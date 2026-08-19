@@ -1,0 +1,30 @@
+name: 'Critiq AI Code Review'
+description: 'Review pull request diffs for bugs, security, style, and performance issues using your own LLM API keys.'
+author: 'darain24'
+
+branding:
+  icon: 'code'
+  color: 'purple'
+
+inputs:
+  groq-api-key:
+    description: 'Groq API key. At least one provider key is required.'
+    required: false
+  cerebras-api-key:
+    description: 'Cerebras API key. At least one provider key is required.'
+    required: false
+  gemini-api-key:
+    description: 'Google Gemini API key. At least one provider key is required.'
+    required: false
+  github-token:
+    description: 'GitHub token used to read the pull request and publish review comments.'
+    required: true
+    default: '${{ github.token }}'
+  min-severity:
+    description: 'Minimum severity to report: style, performance, bug, or security.'
+    required: false
+    default: 'style'
+
+runs:
+  using: 'node20'
+  main: 'packages/github-action/dist/index.js'

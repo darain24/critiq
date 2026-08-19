@@ -11,6 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
-      - uses: ./
+      - uses: darain24/critiq@v1
         with:
           groq-api-key: ${{ secrets.GROQ_API_KEY }}

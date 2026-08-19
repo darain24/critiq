@@ -80,7 +80,7 @@ corepack pnpm --filter ai-code-review-vscode test
 
 ## GitHub Action
 
-The action is in `packages/github-action`, and its checked-in `dist/index.js` is the complete Node 20 runtime. Copy `packages/github-action/examples/review.yml` as a starting point, grant `contents: read` and `pull-requests: write`, and pass at least one repository secret. It posts inline comments only on added diff lines and always posts one severity summary.
+The implementation is in `packages/github-action`, while the Marketplace-facing `action.yml` is at the repository root and points to its checked-in Node 20 bundle. Use `darain24/critiq@v1`, grant `contents: read` and `pull-requests: write`, and pass at least one repository secret. It posts inline comments only on added diff lines and always posts one severity summary. Copy `packages/github-action/examples/review.yml` as a starting point.
 
 Rebuild the distributable after source changes:
 
