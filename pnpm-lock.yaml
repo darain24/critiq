@@ -60,7 +60,7 @@ importers:
       '@actions/github':
         specifier: ^6.0.1
         version: 6.0.1
-      '@yourscope/review-core':
+      '@critiq/review-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -76,12 +76,12 @@ importers:
 
   packages/mcp-server:
     dependencies:
+      '@critiq/review-core':
+        specifier: workspace:*
+        version: link:../core
       '@modelcontextprotocol/sdk':
         specifier: ^1.17.4
         version: 1.30.0(zod@4.4.3)
-      '@yourscope/review-core':
-        specifier: workspace:*
-        version: link:../core
       zod:
         specifier: ^4.1.5
         version: 4.4.3
@@ -95,7 +95,7 @@ importers:
 
   packages/vscode-extension:
     dependencies:
-      '@yourscope/review-core':
+      '@critiq/review-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

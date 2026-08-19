@@ -10,7 +10,7 @@ import {
   type ReviewCategory,
   type ReviewComment,
   type ReviewOptions,
-} from '@yourscope/review-core';
+} from '@critiq/review-core';
 import { z } from 'zod';
 
 const reviewCodeInput = z.object({
@@ -23,7 +23,7 @@ type ReviewFunction = (diff: string, options?: ReviewOptions) => Promise<ReviewC
 
 export function createReviewServer(review: ReviewFunction = reviewDiff): Server {
   const server = new Server(
-    { name: '@yourscope/review-mcp-server', version: '0.1.0' },
+    { name: '@critiq/review-mcp-server', version: '0.1.0' },
     { capabilities: { tools: {} } },
   );
 

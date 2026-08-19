@@ -10,4 +10,4 @@ This Node 20 action reviews pull-request diffs on the runner and posts inline fi
     min-severity: style
 ```
 
-Grant `pull-requests: write` and `contents: read`. At least one provider key is required. The root `action.yml` makes the action consumable as `darain24/critiq@v1` and points to this package's checked-in bundle. `dist/index.js` is produced with `pnpm --filter @yourscope/ai-code-review-action build` and is committed so consumers need no runtime install step.
+Grant `pull-requests: write` and `contents: read`. At least one provider key is required. The root `action.yml` makes the action consumable as `darain24/critiq@v1` and points to this package's checked-in bundle. `dist/index.js` is produced with `pnpm --filter @critiq/ai-code-review-action build` and is committed so consumers need no runtime install step.

@@ -5,7 +5,7 @@ import {
   reviewCategories,
   reviewDiff,
   type ReviewCategory,
-} from '@yourscope/review-core';
+} from '@critiq/review-core';
 
 import { filterByMinimum, postReview, type ReviewOctokit } from './publish.js';
 

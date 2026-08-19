@@ -1,4 +1,4 @@
-import type { ReviewCategory, ReviewComment } from '@yourscope/review-core';
+import type { ReviewCategory, ReviewComment } from '@critiq/review-core';
 
 export interface ReviewOctokit {
   rest: {
