@@ -37,7 +37,7 @@ describe('GitHub review publishing', () => {
       path: 'src/index.ts',
       line: 7,
       side: 'RIGHT',
-      body: '**BUG**: This branch is inverted.\n\n```suggestion\nif (ready) {\n```',
+      body: '**BUG**: This branch is inverted.\n\n```suggestion\nif (ready) {\n```\n\n<!-- critiq-inline -->',
     });
     expect(createComment).toHaveBeenCalledWith(
       expect.objectContaining({ issue_number: 42, body: expect.stringContaining('| bug | 1 |') }),
@@ -76,8 +76,27 @@ describe('GitHub review publishing', () => {
         pulls: {
           listReviewComments: vi.fn().mockResolvedValue({
             data: [
-              { id: 10, path: 'src/a.ts', line: 2, body: '**BUG**: Old wording.' },
-              { id: 11, path: 'src/a.ts', line: 2, body: '**BUG**: Duplicate.' },
+              {
+                id: 10,
+                path: 'src/a.ts',
+                line: 2,
+                body: '**BUG**: Old wording.',
+                user: { login: 'github-actions[bot]' },
+              },
+              {
+                id: 11,
+                path: 'src/a.ts',
+                line: 2,
+                body: '**BUG**: Duplicate.',
+                user: { login: 'github-actions[bot]' },
+              },
+              {
+                id: 12,
+                path: 'old.ts',
+                line: 9,
+                body: '**BUG**: Stale.',
+                user: { login: 'github-actions[bot]' },
+              },
             ],
           }),
           updateReviewComment,
@@ -105,9 +124,13 @@ describe('GitHub review publishing', () => {
     );
 
     expect(updateReviewComment).toHaveBeenCalledWith(
-      expect.objectContaining({ comment_id: 10, body: '**BUG**: New wording.' }),
+      expect.objectContaining({
+        comment_id: 10,
+        body: '**BUG**: New wording.\n\n<!-- critiq-inline -->',
+      }),
     );
     expect(deleteReviewComment).toHaveBeenCalledWith(expect.objectContaining({ comment_id: 11 }));
+    expect(deleteReviewComment).toHaveBeenCalledWith(expect.objectContaining({ comment_id: 12 }));
     expect(updateComment).toHaveBeenCalledWith(
       expect.objectContaining({ comment_id: 20, body: expect.stringContaining('| bug | 1 |') }),
     );
