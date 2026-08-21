@@ -7,7 +7,10 @@ describe('GitHub review publishing', () => {
     const createReviewComment = vi.fn().mockResolvedValue({});
     const createComment = vi.fn().mockResolvedValue({});
     const octokit = {
-      rest: { pulls: { createReviewComment }, issues: { createComment } },
+      rest: {
+        pulls: { listReviewComments: vi.fn().mockResolvedValue({ data: [] }), createReviewComment },
+        issues: { listComments: vi.fn().mockResolvedValue({ data: [] }), createComment },
+      },
     } as unknown as ReviewOctokit;
 
     await postReview(
@@ -46,7 +49,10 @@ describe('GitHub review publishing', () => {
     const createComment = vi.fn().mockResolvedValue({});
     const warning = vi.fn();
     const octokit = {
-      rest: { pulls: { createReviewComment }, issues: { createComment } },
+      rest: {
+        pulls: { listReviewComments: vi.fn().mockResolvedValue({ data: [] }), createReviewComment },
+        issues: { listComments: vi.fn().mockResolvedValue({ data: [] }), createComment },
+      },
     } as unknown as ReviewOctokit;
     await postReview(
       octokit,
@@ -58,5 +64,53 @@ describe('GitHub review publishing', () => {
     expect(createReviewComment).not.toHaveBeenCalled();
     expect(warning).toHaveBeenCalledOnce();
     expect(summaryBody([])).toContain('No issues found');
+  });
+
+  it('updates one existing inline and summary while removing duplicates', async () => {
+    const updateReviewComment = vi.fn().mockResolvedValue({});
+    const deleteReviewComment = vi.fn().mockResolvedValue({});
+    const updateComment = vi.fn().mockResolvedValue({});
+    const deleteComment = vi.fn().mockResolvedValue({});
+    const octokit = {
+      rest: {
+        pulls: {
+          listReviewComments: vi.fn().mockResolvedValue({
+            data: [
+              { id: 10, path: 'src/a.ts', line: 2, body: '**BUG**: Old wording.' },
+              { id: 11, path: 'src/a.ts', line: 2, body: '**BUG**: Duplicate.' },
+            ],
+          }),
+          updateReviewComment,
+          deleteReviewComment,
+        },
+        issues: {
+          listComments: vi.fn().mockResolvedValue({
+            data: [
+              { id: 20, body: '## AI Code Review\n\nOld summary' },
+              { id: 21, body: '<!-- critiq-summary -->\n## AI Code Review\n\nDuplicate' },
+            ],
+          }),
+          updateComment,
+          deleteComment,
+        },
+      },
+    } as unknown as ReviewOctokit;
+
+    await postReview(
+      octokit,
+      { owner: 'a', repo: 'b', pullNumber: 1, commitId: 'head' },
+      [{ file: 'src/a.ts', line: 2, severity: 'bug', message: 'New wording.' }],
+      new Set(['src/a.ts:2']),
+      vi.fn(),
+    );
+
+    expect(updateReviewComment).toHaveBeenCalledWith(
+      expect.objectContaining({ comment_id: 10, body: '**BUG**: New wording.' }),
+    );
+    expect(deleteReviewComment).toHaveBeenCalledWith(expect.objectContaining({ comment_id: 11 }));
+    expect(updateComment).toHaveBeenCalledWith(
+      expect.objectContaining({ comment_id: 20, body: expect.stringContaining('| bug | 1 |') }),
+    );
+    expect(deleteComment).toHaveBeenCalledWith(expect.objectContaining({ comment_id: 21 }));
   });
 });
