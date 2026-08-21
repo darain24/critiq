@@ -60,6 +60,7 @@ interface ExistingInlineComment {
   path?: string | null;
   line?: number | null;
   body?: string;
+  user?: { login?: string } | null;
 }
 
 interface ExistingIssueComment {
@@ -89,6 +90,8 @@ export async function postReview(
       per_page: 100,
     })
   ).data;
+  const keptInlineIds = new Set<number>();
+  const deletedInlineIds = new Set<number>();
 
   for (const comment of comments) {
     if (!changedLines.has(`${comment.file}:${comment.line}`)) {
@@ -107,6 +110,7 @@ export async function postReview(
       );
       const [current, ...duplicates] = matches;
       if (current) {
+        keptInlineIds.add(current.id);
         await octokit.rest.pulls.updateReviewComment({
           owner: target.owner,
           repo: target.repo,
@@ -114,13 +118,14 @@ export async function postReview(
           body,
         });
         await Promise.all(
-          duplicates.map((duplicate) =>
-            octokit.rest.pulls.deleteReviewComment({
+          duplicates.map((duplicate) => {
+            deletedInlineIds.add(duplicate.id);
+            return octokit.rest.pulls.deleteReviewComment({
               owner: target.owner,
               repo: target.repo,
               comment_id: duplicate.id,
-            }),
-          ),
+            });
+          }),
         );
       } else {
         await octokit.rest.pulls.createReviewComment({
@@ -140,6 +145,23 @@ export async function postReview(
       );
     }
   }
+
+  await Promise.all(
+    existingInline
+      .filter(
+        (comment) =>
+          isCritiqInlineComment(comment) &&
+          !keptInlineIds.has(comment.id) &&
+          !deletedInlineIds.has(comment.id),
+      )
+      .map((comment) =>
+        octokit.rest.pulls.deleteReviewComment({
+          owner: target.owner,
+          repo: target.repo,
+          comment_id: comment.id,
+        }),
+      ),
+  );
 
   const body = summaryBody(comments);
   const existingSummaries = (
@@ -205,7 +227,15 @@ function formatInlineComment(comment: ReviewComment): string {
   const suggestion = comment.suggestion
     ? `\n\n\`\`\`suggestion\n${comment.suggestion}\n\`\`\``
     : '';
-  return `**${comment.severity.toUpperCase()}**: ${comment.message}${suggestion}`;
+  return `**${comment.severity.toUpperCase()}**: ${comment.message}${suggestion}\n\n<!-- critiq-inline -->`;
+}
+
+function isCritiqInlineComment(comment: ExistingInlineComment): boolean {
+  return (
+    comment.body?.includes('<!-- critiq-inline -->') === true ||
+    (comment.user?.login === 'github-actions[bot]' &&
+      /^\*\*(BUG|SECURITY|STYLE|PERFORMANCE)\*\*:/.test(comment.body ?? ''))
+  );
 }
 
 function errorMessage(error: unknown): string {
