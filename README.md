@@ -44,9 +44,9 @@ An optional `.reviewconfig.json` in the caller's working directory can configure
 
 ## Provider keys
 
-- **Groq:** create a key in the [GroqCloud API Keys console](https://console.groq.com/keys) and set `GROQ_API_KEY`. The default model is `llama-3.3-70b-versatile`.
-- **Cerebras:** create a key in the [Cerebras Cloud console](https://cloud.cerebras.ai/) and set `CEREBRAS_API_KEY`. The default model is `llama-3.3-70b`.
-- **Gemini:** create a key in [Google AI Studio](https://aistudio.google.com/app/apikey) and set `GEMINI_API_KEY`. The default model is `gemini-2.0-flash`.
+- **Groq:** create a key in the [GroqCloud API Keys console](https://console.groq.com/keys) and set `GROQ_API_KEY`. The default model is `openai/gpt-oss-120b`.
+- **Cerebras:** create a key in the [Cerebras Cloud console](https://cloud.cerebras.ai/) and set `CEREBRAS_API_KEY`. The default model is `gpt-oss-120b`.
+- **Gemini:** create a key in [Google AI Studio](https://aistudio.google.com/app/apikey) and set `GEMINI_API_KEY`. The default model is `gemini-3.6-flash`.
 
 When multiple keys exist, core tries Groq, Cerebras, then Gemini. It advances only after a rate limit or timeout; authentication and other non-transient errors are reported immediately so a bad configuration is not hidden. Provider free tiers and limits can change, so check each provider's current terms before use.
 
@@ -80,7 +80,7 @@ corepack pnpm --filter ai-code-review-vscode test
 
 ## GitHub Action
 
-The implementation is in `packages/github-action`, while the Marketplace-facing `action.yml` is at the repository root and points to its checked-in Node 20 bundle. Use `darain24/critiq@v1`, grant `contents: read` and `pull-requests: write`, and pass at least one repository secret. It posts inline comments only on added diff lines and always posts one severity summary. Copy `packages/github-action/examples/review.yml` as a starting point.
+The implementation is in `packages/github-action`, while the Marketplace-facing `action.yml` is at the repository root and points to its checked-in Node 24 bundle. Use `darain24/critiq@v1`, grant `contents: read` and `pull-requests: write`, and pass at least one repository secret. It posts inline comments only on added diff lines and always posts one severity summary. Set `categories` to a comma-separated subset of `bug,security,style,performance` when you want a narrower review. Copy `packages/github-action/examples/review.yml` as a starting point.
 
 Rebuild the distributable after source changes:
 
@@ -113,4 +113,4 @@ That architecture does not make third-party compute unlimited: provider quotas, 
 4. Rebuild and commit the GitHub Action bundle when its source or core changes.
 5. Never commit keys, `.env` files, review caches, or provider responses containing private code.
 
-The VS Code publisher placeholder `yourscope` must be renamed before its Marketplace release. Additional implementation choices are recorded in `DECISIONS.md`.
+The public package scope is `@critiq`, and the VS Code Marketplace publisher ID is configured as `darain24`. Additional implementation choices are recorded in `DECISIONS.md`.

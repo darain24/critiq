@@ -24,6 +24,10 @@ inputs:
     description: 'Minimum severity to report: style, performance, bug, or security.'
     required: false
     default: 'style'
+  categories:
+    description: 'Comma-separated review categories: bug, security, style, performance.'
+    required: false
+    default: 'bug,security,style,performance'
 
 runs:
   using: 'node24'

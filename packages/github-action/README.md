@@ -1,12 +1,13 @@
 # AI Code Review GitHub Action
 
-This Node 20 action reviews pull-request diffs on the runner and posts inline findings plus one summary. No external service is deployed; only the selected model provider receives diff hunks.
+This Node 24 action reviews pull-request diffs on the runner and posts inline findings plus one summary. No external service is deployed; only the selected model provider receives diff hunks.
 
 ```yaml
 - uses: darain24/critiq@v1
   with:
     github-token: ${{ github.token }}
     groq-api-key: ${{ secrets.GROQ_API_KEY }}
+    categories: bug,security
     min-severity: style
 ```
 

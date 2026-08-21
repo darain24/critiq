@@ -55,13 +55,13 @@ abstract class OpenAICompatibleProvider implements ReviewLLMClient {
 
 export class GroqProvider extends OpenAICompatibleProvider {
   protected readonly providerName = 'Groq';
-  protected readonly defaultModel = 'llama-3.3-70b-versatile';
+  protected readonly defaultModel = 'openai/gpt-oss-120b';
   protected readonly defaultBaseUrl = 'https://api.groq.com/openai/v1';
 }
 
 export class CerebrasProvider extends OpenAICompatibleProvider {
   protected readonly providerName = 'Cerebras';
-  protected readonly defaultModel = 'llama-3.3-70b';
+  protected readonly defaultModel = 'gpt-oss-120b';
   protected readonly defaultBaseUrl = 'https://api.cerebras.ai/v1';
 }
 
@@ -69,7 +69,7 @@ export class GeminiProvider implements ReviewLLMClient {
   constructor(private readonly options: ProviderOptions) {}
 
   async review(prompt: string): Promise<string> {
-    const model = this.options.model ?? 'gemini-2.0-flash';
+    const model = this.options.model ?? 'gemini-3.6-flash';
     const baseUrl = this.options.baseUrl ?? 'https://generativelanguage.googleapis.com/v1beta';
     const response = await requestWithTimeout(
       `${baseUrl}/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(this.options.apiKey)}`,

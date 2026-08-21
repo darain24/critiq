@@ -4,6 +4,7 @@ out/
 out-test/
 dist-types/
 .vscode-test/
+.vscode-te
 coverage/
 .env
 .env.*

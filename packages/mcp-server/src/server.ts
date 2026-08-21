@@ -23,7 +23,7 @@ type ReviewFunction = (diff: string, options?: ReviewOptions) => Promise<ReviewC
 
 export function createReviewServer(review: ReviewFunction = reviewDiff): Server {
   const server = new Server(
-    { name: '@critiq/review-mcp-server', version: '0.1.0' },
+    { name: '@critiq/review-mcp-server', version: '1.0.2' },
     { capabilities: { tools: {} } },
   );
 
