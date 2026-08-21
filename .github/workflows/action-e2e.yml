@@ -3,7 +3,6 @@ name: Critiq Action E2E
 on:
   pull_request:
     types: [opened, synchronize, reopened, labeled]
-    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read
@@ -11,8 +10,9 @@ permissions:
 
 jobs:
   review:
-    if: contains(github.event.pull_request.labels.*.name, 'critiq-e2e')
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      contains(github.event.pull_request.labels.*.name, 'critiq-e2e')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
