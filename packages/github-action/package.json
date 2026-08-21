@@ -1,7 +1,7 @@
 {
   "name": "@critiq/ai-code-review-action",
   "version": "0.1.0",
-  "description": "Node 20 GitHub Action for AI pull request review",
+  "description": "Node 24 GitHub Action for AI pull request review",
   "main": "dist/index.js",
   "scripts": {
     "build": "ncc build src/index.ts -o dist --minify",
