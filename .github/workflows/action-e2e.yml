@@ -1,0 +1,22 @@
+name: Critiq Action E2E
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Review pull request with Critiq
+        uses: ./
+        with:
+          github-token: ${{ github.token }}
+          groq-api-key: ${{ secrets.GROQ_API_KEY }}
+          min-severity: style

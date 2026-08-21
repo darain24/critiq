@@ -1,9 +1,18 @@
 {
   "name": "ai-code-review-vscode",
-  "displayName": "AI Code Review",
+  "displayName": "Critiq AI Code Review",
   "description": "Review files and staged changes with user-supplied Groq, Cerebras, or Gemini keys.",
-  "version": "0.1.0",
-  "publisher": "yourscope",
+  "version": "1.0.2",
+  "publisher": "darain24",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/darain24/critiq.git"
+  },
+  "homepage": "https://github.com/darain24/critiq#readme",
+  "bugs": {
+    "url": "https://github.com/darain24/critiq/issues"
+  },
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -21,19 +30,19 @@
     "commands": [
       {
         "command": "codeReview.reviewCurrentFile",
-        "title": "AI Code Review: Review Current File"
+        "title": "Critiq: Review Current File"
       },
       {
         "command": "codeReview.reviewSelection",
-        "title": "AI Code Review: Review Selection"
+        "title": "Critiq: Review Selection"
       },
       {
         "command": "codeReview.reviewStagedChanges",
-        "title": "AI Code Review: Review Staged Changes"
+        "title": "Critiq: Review Staged Changes"
       },
       {
         "command": "codeReview.setApiKey",
-        "title": "AI Code Review: Set API Key"
+        "title": "Critiq: Set API Key"
       }
     ],
     "configuration": {

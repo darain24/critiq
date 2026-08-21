@@ -1,6 +1,6 @@
 {
   "name": "@critiq/ai-code-review-action",
-  "version": "0.1.0",
+  "version": "1.0.2",
   "description": "Node 24 GitHub Action for AI pull request review",
   "main": "dist/index.js",
   "scripts": {

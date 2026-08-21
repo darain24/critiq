@@ -55,7 +55,7 @@ abstract class OpenAICompatibleProvider implements ReviewLLMClient {
 
 export class GroqProvider extends OpenAICompatibleProvider {
   protected readonly providerName = 'Groq';
-  protected readonly defaultModel = 'llama-3.3-70b-versatile';
+  protected readonly defaultModel = 'openai/gpt-oss-120b';
   protected readonly defaultBaseUrl = 'https://api.groq.com/openai/v1';
 }
 
