@@ -19,6 +19,5 @@ jobs:
         with:
           github-token: ${{ github.token }}
           groq-api-key: ${{ secrets.GROQ_API_KEY }}
-          cerebras-api-key: ${{ secrets.CEREBRAS_API_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
           min-severity: style

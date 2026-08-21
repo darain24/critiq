@@ -45,8 +45,8 @@ An optional `.reviewconfig.json` in the caller's working directory can configure
 ## Provider keys
 
 - **Groq:** create a key in the [GroqCloud API Keys console](https://console.groq.com/keys) and set `GROQ_API_KEY`. The default model is `openai/gpt-oss-120b`.
-- **Cerebras:** create a key in the [Cerebras Cloud console](https://cloud.cerebras.ai/) and set `CEREBRAS_API_KEY`. The default model is `llama-3.3-70b`.
-- **Gemini:** create a key in [Google AI Studio](https://aistudio.google.com/app/apikey) and set `GEMINI_API_KEY`. The default model is `gemini-2.0-flash`.
+- **Cerebras:** create a key in the [Cerebras Cloud console](https://cloud.cerebras.ai/) and set `CEREBRAS_API_KEY`. The default model is `gpt-oss-120b`.
+- **Gemini:** create a key in [Google AI Studio](https://aistudio.google.com/app/apikey) and set `GEMINI_API_KEY`. The default model is `gemini-3.6-flash`.
 
 When multiple keys exist, core tries Groq, Cerebras, then Gemini. It advances only after a rate limit or timeout; authentication and other non-transient errors are reported immediately so a bad configuration is not hidden. Provider free tiers and limits can change, so check each provider's current terms before use.
 
