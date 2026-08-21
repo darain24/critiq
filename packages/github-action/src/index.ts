@@ -50,8 +50,9 @@ export async function run(): Promise<void> {
     if (typeof diff !== 'string')
       throw new Error('GitHub returned an unexpected non-text diff response.');
 
+    const categories = parseCategories(core.getInput('categories'));
     const comments = await reviewDiff(diff, {
-      categories: [...reviewCategories],
+      categories,
       cacheKey: `${pullRequest.head.sha}:${hashText(diff)}`,
     });
     const minimum = parseMinimum(core.getInput('min-severity') || 'style');
@@ -72,6 +73,20 @@ export async function run(): Promise<void> {
   } catch (error) {
     core.setFailed(`AI Code Review failed: ${errorMessage(error)}`);
   }
+}
+
+function parseCategories(value: string): ReviewCategory[] {
+  if (!value.trim()) return [...reviewCategories];
+  const categories = [...new Set(value.split(',').map((category) => category.trim()))];
+  const invalid = categories.filter(
+    (category) => !reviewCategories.includes(category as ReviewCategory),
+  );
+  if (invalid.length > 0) {
+    throw new Error(
+      `Invalid categories "${invalid.join(', ')}". Use a comma-separated subset of ${reviewCategories.join(', ')}.`,
+    );
+  }
+  return categories as ReviewCategory[];
 }
 
 function parseMinimum(value: string): ReviewCategory {

@@ -2,6 +2,7 @@ name: Critiq Action E2E
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, labeled]
     types: [opened, synchronize, reopened]
 
 permissions:
@@ -10,6 +11,7 @@ permissions:
 
 jobs:
   review:
+    if: contains(github.event.pull_request.labels.*.name, 'critiq-e2e')
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
@@ -20,4 +22,5 @@ jobs:
           github-token: ${{ github.token }}
           groq-api-key: ${{ secrets.GROQ_API_KEY }}
           gemini-api-key: ${{ secrets.GEMINI_API_KEY }}
-          min-severity: style
+          categories: bug
+          min-severity: bug
